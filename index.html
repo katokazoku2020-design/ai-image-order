@@ -88,18 +88,43 @@
         <option>高画質サイズ（後日対応予定）</option>
       </select>
 
-      <button type="submit">注文内容を確認する</button>
+      <button type="submit">注文を送信する</button>
     </form>
 
     <div class="notice">
-      ※ 現在は注文ページの試作版です。送信・決済・画像生成はまだ実行されません。
+      ※ 注文内容は「AI画像注文管理」シートへ送信されます。受付完了メール、決済、画像生成はまだ自動化されていません。
     </div>
   </main>
 
   <script>
-    document.getElementById("orderForm").addEventListener("submit", function(e) {
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySI78u0aG7zIQfYnmMamctoVMD3L1Tw6fiqT7-codb1h4C0SP6cc8f-EumVcDu5bE_/exec";
+
+    document.getElementById("orderForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      alert("注文ページの試作版です。現在、注文受付はまだ開始していません。");
+
+      const form = e.currentTarget;
+      if (!confirm("この内容で注文を送信しますか？")) return;
+
+      const payload = {
+        name: form.elements.namedItem("name").value,
+        email: form.elements.namedItem("email").value,
+        imageType: form.elements.namedItem("type").value,
+        imageIdea: form.elements.namedItem("description").value,
+        imageSize: form.elements.namedItem("size").value
+      };
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        alert("注文の送信リクエストを送りました。受付完了メールはまだありません。");
+        form.reset();
+      } catch (error) {
+        alert("送信できませんでした。時間をおいて再度お試しください。");
+      }
     });
   </script>
 </body>
