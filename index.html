@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI画像制作オーダー</title>
   <style>
     * { box-sizing: border-box; }
@@ -10,122 +10,47 @@
       margin: 0;
       padding: 24px 16px;
       font-family: sans-serif;
-      background: #f3f4f8;
       color: #222;
+      background: #f3f4f8;
     }
-    .container {
+    main {
       max-width: 560px;
-      margin: auto;
-      padding: 28px;
-      background: white;
+      margin: 40px auto;
+      padding: 32px 24px;
+      text-align: center;
+      background: #fff;
       border-radius: 16px;
       box-shadow: 0 4px 20px #00000012;
     }
-    h1 { text-align: center; font-size: 25px; }
-    .description { text-align: center; color: #666; }
-    label {
+    h1 { font-size: 26px; }
+    p { color: #555; line-height: 1.8; }
+    a {
       display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      margin-top: 8px;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    textarea { min-height: 110px; }
-    button {
-      width: 100%;
       margin-top: 24px;
       padding: 15px;
-      border: 0;
       border-radius: 9px;
-      background: #635bdb;
       color: white;
+      background: #635bdb;
       font-size: 17px;
       font-weight: bold;
+      text-decoration: none;
     }
-    .notice {
-      margin-top: 20px;
-      padding: 12px;
-      background: #f1f0ff;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #555;
-    }
+    .note { margin-top: 20px; font-size: 13px; }
   </style>
 </head>
 <body>
-  <main class="container">
+  <main>
     <h1>AI画像制作オーダー</h1>
-    <p class="description">あなただけのオリジナル画像を制作します。</p>
+    <p>あなただけのオリジナル画像を制作します。<br>
+      ご希望の内容をフォームからお送りください。</p>
 
-    <form id="orderForm">
-      <label for="name">お名前・ニックネーム</label>
-      <input id="name" name="name" required>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScxb8xBqpVXTHjKSekn7UcY0VQNVmwZ-N0pQp9bE8xz-d3nog/viewform?usp=header">
+      注文フォームを開く
+    </a>
 
-      <label for="email">連絡用メールアドレス</label>
-      <input id="email" name="email" type="email" required>
-
-      <label for="type">画像の種類</label>
-      <select id="type" name="type">
-        <option>アニメ風</option>
-        <option>リアル風</option>
-        <option>ファンタジー風</option>
-        <option>その他</option>
-      </select>
-
-      <label for="description">画像の希望・イメージ</label>
-      <textarea id="description" name="description"
-        placeholder="キャラクター、服装、背景、ポーズなど"></textarea>
-
-      <label for="size">画像サイズ</label>
-      <select id="size" name="size">
-        <option>通常サイズ</option>
-        <option>高画質サイズ（後日対応予定）</option>
-      </select>
-
-      <button type="submit">注文を送信する</button>
-    </form>
-
-    <div class="notice">
-      ※ 注文内容は「AI画像注文管理」シートへ送信されます。受付完了メール、決済、画像生成はまだ自動化されていません。
-    </div>
+    <p class="note">
+      ※現在、決済・画像生成・受付完了メールは自動化されていません。
+    </p>
   </main>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQ6hrrrcfsNBRoSLm8DIWXZ4FqKMbYhMgiwgT7fP3iA1x7Xkfp28ri6m6Eyc5NwiHj/exec";
-
-    document.getElementById("orderForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-
-      const form = e.currentTarget;
-      if (!confirm("この内容で注文を送信しますか？")) return;
-
-      const payload = {
-        name: form.elements.namedItem("name").value,
-        email: form.elements.namedItem("email").value,
-        imageType: form.elements.namedItem("type").value,
-        imageIdea: form.elements.namedItem("description").value,
-        imageSize: form.elements.namedItem("size").value
-      };
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-        alert("注文の送信リクエストを送りました。受付完了メールはまだありません。");
-        form.reset();
-      } catch (error) {
-        alert("送信できませんでした。時間をおいて再度お試しください。");
-      }
-    });
-  </script>
 </body>
 </html>
